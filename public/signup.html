@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>التسجيل في المكتبة</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+<header class="navbar">
+  <div class="topbar-brand">
+    <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+    <div class="topbar-brand-text">
+      <div class="name">الجامعة التكنولوجية</div>
+      <div class="sub">نظام الدخول إلى المكتبة</div>
+    </div>
+  </div>
+  <div class="topbar-end">
+    <div class="topbar-brand topbar-brand-secondary">
+      <div class="topbar-brand-text">
+        <div class="name">المكتبة المركزية</div>
+      </div>
+      <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+    </div>
+    <div class="topbar-actions">
+    </div>
+  </div>
+</header>
+<div class="page page-narrow">
+  <h1>مرحباً بك في المكتبة</h1>
+  <p class="subtitle">سجّل بياناتك مرة واحدة فقط، وبعدها يكفي النظر إلى الكاميرا في الجهاز الآخر لتسجيل حضورك.</p>
+
+  <div id="banner"></div>
+
+  <div class="card" id="step-info">
+    <div class="step-indicator"><span class="dot active"></span><span class="dot"></span> الخطوة ١ من ٢ — بياناتك</div>
+
+    <label for="name">الاسم الكامل</label>
+    <input type="text" id="name" placeholder="مثال: أحمد علي" autocomplete="off" maxlength="80" />
+
+    <label for="phone">رقم الهاتف</label>
+    <input type="tel" id="phone" placeholder="07701234567" autocomplete="off" maxlength="20" />
+
+    <label for="college">الكلية</label>
+    <select id="college"></select>
+
+    <label for="grade">المرحلة الدراسية</label>
+    <select id="grade"></select>
+
+    <label>الجنس</label>
+    <div class="radio-group" id="gender-group">
+      <label data-value="Male"><input type="radio" name="gender" value="Male" /> ذكر</label>
+      <label data-value="Female"><input type="radio" name="gender" value="Female" /> أنثى</label>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" id="continue-btn">متابعة</button>
+    </div>
+  </div>
+
+  <div class="card" id="step-photo" style="display:none">
+    <div class="step-indicator"><span class="dot"></span><span class="dot active"></span> الخطوة ٢ من ٢ — التقط صورتك</div>
+
+    <label>الصورة</label>
+    <div class="camera-wrap" id="camera-wrap">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas" style="display:none"></canvas>
+      <img id="captured-img" style="display:none" />
+    </div>
+    <div class="btn-row">
+      <button type="button" class="secondary" id="retake-btn" style="display:none">إعادة التقاط الصورة</button>
+      <button type="button" id="capture-btn">التقاط الصورة</button>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="secondary" id="back-btn">رجوع</button>
+      <button type="button" id="submit-btn" disabled>تسجيل</button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/face-api.min.js"></script>
+<script src="signup.js"></script>
+<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+</body>
+</html>

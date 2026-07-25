@@ -1,0 +1,17 @@
+node_modules/
+.env
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Uploaded face photos contain PII - keep the folder tracked, ignore its contents
+/photos/*
+!/photos/.gitkeep
+
+# Local backups (see scripts/backup.js) and pm2 logs — never commit real data
+/backups/
+/logs/
+
+# TLS certificate/private key (e.g. mkcert output) — never commit these
+/certs/

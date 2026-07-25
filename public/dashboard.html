@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>لوحة تحكم المكتبة</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+<header class="navbar">
+  <div class="topbar-brand">
+    <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+    <div class="topbar-brand-text">
+      <div class="name">الجامعة التكنولوجية</div>
+      <div class="sub">نظام الدخول إلى المكتبة</div>
+    </div>
+  </div>
+  <div class="topbar-end">
+    <div class="topbar-brand topbar-brand-secondary">
+      <div class="topbar-brand-text">
+        <div class="name">المكتبة المركزية</div>
+      </div>
+      <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge-admin">الإدارة</span>
+      <a class="link" href="signup.html" target="_blank" rel="noopener noreferrer">جهاز التسجيل</a>
+      <a class="link" href="signin.html" target="_blank" rel="noopener noreferrer">جهاز تسجيل الحضور</a>
+      <button type="button" class="secondary" id="logout-btn">تسجيل الخروج</button>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <h1>لوحة تحكم المكتبة</h1>
+  <p class="subtitle">نظرة عامة على التسجيلات والحضور.</p>
+  <p class="subtitle" id="today-date"></p>
+
+  <div id="refresh-banner"></div>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="card" style="padding:8px">
+    <div class="tab-bar">
+      <button type="button" class="secondary" id="tab-btn-signups">المسجّلون اليوم</button>
+      <button type="button" class="secondary" id="tab-btn-signins">الحضور اليوم</button>
+      <button type="button" class="gold" id="tab-btn-allpeople">جميع الأشخاص</button>
+    </div>
+  </div>
+
+  <div class="card" id="panel-signups" style="display:none">
+    <h2 style="margin-top:0">المسجّلون اليوم</h2>
+    <div class="search-row filter-row">
+      <span class="filter-row-label">تصفية حسب</span>
+      <span class="filter-field"><label for="signups-college-filter">الكلية</label><select id="signups-college-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="signups-grade-filter">المرحلة</label><select id="signups-grade-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="signups-gender-filter">الجنس</label><select id="signups-gender-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+    </div>
+    <div id="signups-today"></div>
+    <div class="pagination" id="signups-today-pagination"></div>
+  </div>
+
+  <div class="card" id="panel-signins" style="display:none">
+    <h2 style="margin-top:0">الحضور اليوم</h2>
+    <div class="search-row filter-row">
+      <span class="filter-row-label">تصفية حسب</span>
+      <span class="filter-field"><label for="signins-college-filter">الكلية</label><select id="signins-college-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="signins-grade-filter">المرحلة</label><select id="signins-grade-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="signins-gender-filter">الجنس</label><select id="signins-gender-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+    </div>
+    <div id="signins-today"></div>
+    <div class="pagination" id="signins-today-pagination"></div>
+  </div>
+
+  <div class="card" id="panel-allpeople">
+    <h2 style="margin-top:0">جميع الأشخاص</h2>
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="ابحث بالاسم أو الكلية أو رقم الهاتف..." />
+      <span class="count" id="search-count"></span>
+      <button type="button" class="gold" id="export-btn">تصدير إلى Excel</button>
+      <button type="button" class="secondary" id="download-logs-btn">تحميل السجلات حسب اليوم</button>
+      <button type="button" class="secondary" id="bulk-delete-btn" disabled>حذف المحدد</button>
+    </div>
+    <div class="search-row filter-row">
+      <span class="filter-row-label">تصفية حسب</span>
+      <span class="filter-field"><label for="allpeople-college-filter">الكلية</label><select id="allpeople-college-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="allpeople-grade-filter">المرحلة</label><select id="allpeople-grade-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+      <span class="filter-field"><label for="allpeople-gender-filter">الجنس</label><select id="allpeople-gender-filter" style="width:auto;min-width:140px"><option value="">الكل</option></select></span>
+    </div>
+    <div id="all-people"></div>
+    <div class="pagination" id="all-people-pagination"></div>
+  </div>
+</div>
+
+<div id="logs-modal-root"></div>
+
+<div id="bulk-delete-modal-root"></div>
+
+<div id="modal-root"></div>
+
+<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

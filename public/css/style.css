@@ -1,0 +1,787 @@
+/* ==========================================================================
+   University of Technology - Iraq — Library Access System
+   Design system: navy / white / blue / gold, tablet-first, print-safe.
+   ========================================================================== */
+
+:root {
+  --navy-900: #0a2342;
+  --navy-800: #123a6b;
+  --navy-700: #1c4a82;
+  --blue-600: #2f6fb0;
+  --blue-700: #245a8f;
+  --blue-50: #eaf3fb;
+  --blue-100: #d6e8f7;
+  --gold-500: #f2a900;
+  --gold-600: #cf8f00;
+  --gold-50: #fdf3dc;
+  --white: #ffffff;
+  --bg: #f3f6fa;
+  --ink-900: #16212f;
+  --ink-600: #526174;
+  --ink-400: #8a97a8;
+  --border: #dfe6ee;
+  --success-fg: #157347;
+  --success-bg: #e9f7ef;
+  --success-bd: #bfe8d0;
+  --danger-fg: #c0281f;
+  --danger-bg: #fdeeec;
+  --danger-bd: #f5c6c1;
+  --info-fg: #245a8f;
+  --info-bg: #eaf3fb;
+  --info-bd: #c9dff2;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 1px 2px rgba(10, 35, 66, 0.06);
+  --shadow-md: 0 10px 28px rgba(10, 35, 66, 0.1);
+  --font: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink-900);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+/* Sticky footer: .page (or .login-shell) is the only flexible child, so on
+   short pages the footer sits right after the content with no trailing gap,
+   and on tall pages the body still grows/scrolls normally. */
+.site-footer { flex: 0 0 auto; }
+
+/* ---------- Layout shell ---------- */
+
+.page {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 24px 28px;
+  /* Body content reads from the natural RTL start (right side, for Arabic).
+     Titles/headings are the one exception and stay centered — see below. */
+  text-align: start;
+}
+.page.page-narrow { max-width: 640px; }
+
+.radio-group label { text-align: center; }
+
+h1, h2, h3, .kicker, .subtitle {
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.65rem;
+  margin: 0 0 4px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--navy-900);
+}
+h2 { color: var(--navy-900); font-weight: 700; }
+h3 { color: var(--navy-900); font-weight: 700; }
+
+.subtitle { color: var(--ink-600); margin: 0 0 24px; line-height: 1.5; }
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--blue-700);
+  margin: 0 0 6px;
+}
+
+/* ---------- Site header: two tiers, echoing uotechnology.edu.iq's own
+   header (a slim dark utility strip above a white nav bar with the crest) --- */
+
+.util-bar {
+  background: var(--navy-800);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 7px 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar {
+  background: var(--white);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 3px solid var(--gold-500);
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink-900);
+  min-width: 0;
+}
+.crest {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.crest svg { width: 24px; height: 24px; display: block; }
+.crest img { width: 100%; height: 100%; object-fit: contain; }
+.topbar-brand-text { min-width: 0; }
+.topbar-brand-text .name {
+  font-weight: 800;
+  font-size: 1.02rem;
+  line-height: 1.25;
+  color: var(--navy-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-brand-text .sub {
+  font-size: 0.76rem;
+  color: var(--ink-600);
+  font-weight: 500;
+}
+/* The far end of the navbar (opposite the main university crest) — holds the
+   Central Library's own logo/name plus any page actions, so both brand
+   marks and the action buttons live together at that one flex edge. */
+.topbar-end { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.topbar-brand-secondary .topbar-brand-text .name { font-size: 0.94rem; }
+
+.topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.topbar-actions .link {
+  color: var(--blue-700);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.topbar-actions .link:hover { background: var(--blue-50); }
+.topbar-actions .badge-admin {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--navy-900);
+  background: var(--gold-500);
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.navbar button.secondary {
+  background: var(--white);
+  color: var(--ink-900);
+  border-color: var(--border);
+}
+.navbar button.secondary:hover { background: var(--bg); }
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--ink-400);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.step-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.step-indicator .dot.active { background: var(--gold-500); }
+
+/* ---------- Forms ---------- */
+
+label {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-600);
+  margin: 16px 0 6px;
+}
+label:first-child { margin-top: 0; }
+
+input[type="text"],
+input[type="tel"],
+input[type="password"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--ink-900);
+  font-family: var(--font);
+  font-size: 1rem;
+  min-height: 48px;
+}
+input::placeholder { color: var(--ink-400); }
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--blue-600);
+  box-shadow: 0 0 0 4px var(--blue-100);
+}
+
+select { appearance: auto; cursor: pointer; }
+select option { color: var(--ink-900); }
+
+/* Polished checkbox row, used in the download-logs dialog and anywhere else
+   a labeled checkbox needs to look like part of the design system instead
+   of a bare native checkbox with plain text next to it. */
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-900);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.check-row:first-of-type { margin-top: 0; }
+.check-row:hover { border-color: var(--blue-100); background: var(--blue-50); }
+.check-row:has(input:checked) {
+  border-color: var(--blue-600);
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+.check-row input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  flex: none;
+  accent-color: var(--blue-600);
+  cursor: pointer;
+}
+
+.radio-group { display: flex; gap: 10px; margin-top: 6px; }
+.radio-group label {
+  flex: 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  min-height: 48px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+.radio-group input { accent-color: var(--blue-600); }
+.radio-group label.selected {
+  border-color: var(--blue-600);
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+  cursor: pointer;
+  border: 1.5px solid var(--ink-900);
+  border-right: 4px solid var(--blue-600);
+  border-radius: var(--radius-sm);
+  padding: 14px 22px;
+  min-height: 48px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue-600);
+  transition: transform 0.1s ease, background 0.15s ease, opacity 0.15s ease;
+}
+button:hover { background: var(--blue-700); }
+button:active { transform: scale(0.98); }
+button:disabled {
+  background: var(--border);
+  border-color: var(--ink-400);
+  border-right-color: var(--blue-100);
+  color: var(--ink-400);
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: var(--white);
+  color: var(--ink-900);
+}
+button.secondary:hover { background: var(--bg); }
+
+button.gold {
+  background: var(--gold-500);
+  color: var(--navy-900);
+}
+button.gold:hover { background: var(--gold-600); }
+
+.btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.btn-row button { flex: 1; min-width: 140px; }
+
+/* ---------- Camera ---------- */
+
+.camera-wrap {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0a1420;
+  aspect-ratio: 4 / 3;
+  /* Capped by viewport height (not just width) so the kiosk's whole page —
+     header, camera, and footer — fits on a tablet screen without scrolling,
+     instead of a 4:3 box forcing the page taller than the viewport. */
+  max-height: 42vh;
+  max-width: 100%;
+  margin: 8px auto 0;
+  border: 1.5px solid var(--border);
+}
+.camera-wrap video,
+.camera-wrap canvas,
+.camera-wrap img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.camera-wrap.ready { border-color: var(--gold-500); }
+
+.flip-camera-btn {
+  position: absolute;
+  bottom: 12px;
+  inset-inline-end: 12px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(10, 20, 35, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.flip-camera-btn:hover { background: rgba(10, 20, 35, 0.8); }
+.flip-camera-btn:active { transform: scale(0.92); }
+.flip-camera-btn.spin { animation: spin 0.5s ease; }
+.flip-camera-btn:disabled { opacity: 0.6; }
+
+/* ---------- Status banners ---------- */
+
+.status-banner {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  border: 1.5px solid var(--border);
+  border-inline-start-width: 5px;
+  background: var(--bg);
+  color: var(--ink-900);
+  animation: fadeInUp 0.25s ease both;
+}
+.status-banner.info { color: var(--info-fg); background: var(--info-bg); border-color: var(--info-bd); }
+.status-banner.success { color: var(--success-fg); background: var(--success-bg); border-color: var(--success-bd); }
+.status-banner.error { color: var(--danger-fg); background: var(--danger-bg); border-color: var(--danger-bd); }
+
+/* Transient toast: positioned copy of .status-banner.success, floated over
+   the page instead of sitting inline in the banner slot. Centered via
+   inset-inline/margin-inline (not transform) so it doesn't fight the
+   fadeInUp keyframe's own transform during the entrance animation. */
+.toast {
+  position: fixed;
+  top: 20px;
+  inset-inline: 0;
+  margin-inline: auto;
+  width: fit-content;
+  max-width: 90vw;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* ---------- Recognized panel ---------- */
+
+.recognized-panel { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; text-align: start; }
+.recognized-panel img {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold-500);
+}
+
+/* ---------- Tables ---------- */
+
+.table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 480px; }
+th, td { text-align: center; padding: 12px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th { color: var(--ink-600); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em; background: var(--bg); position: sticky; top: 0; }
+tr[data-id] { cursor: pointer; transition: background 0.1s ease; }
+tr[data-id]:hover td { background: var(--blue-50); }
+#select-all-checkbox,
+.row-select-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--blue-600);
+  cursor: pointer;
+}
+
+/* ---------- Pagination ---------- */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.pagination button {
+  min-height: 44px;
+  padding: 6px 14px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  background: var(--white);
+  color: var(--ink-900);
+  border: 1.5px solid var(--border);
+}
+.pagination button:hover:not(:disabled) { background: var(--blue-50); border-color: var(--blue-100); }
+.pagination button.active {
+  background: var(--blue-600);
+  border-color: var(--blue-600);
+  color: #fff;
+}
+.pagination button:disabled { opacity: 0.5; }
+
+.tab-bar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.tab-bar button { flex: 1; min-width: 140px; }
+
+/* ---------- Stats ---------- */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-tile {
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy-800), var(--blue-600));
+}
+.stat-tile .value { font-size: 2.1rem; font-weight: 800; color: var(--navy-900); }
+.stat-tile .label { color: var(--ink-600); font-size: 0.85rem; margin-top: 4px; font-weight: 600; }
+
+/* ---------- Pills ---------- */
+
+.pill {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--ink-600);
+}
+.pill.male { color: var(--blue-700); background: var(--blue-50); border-color: var(--blue-100); }
+.pill.female { color: #a8155a; background: #fdeef4; border-color: #f6c9dd; }
+
+/* ---------- Search / filter row ---------- */
+
+.search-row { display: flex; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; justify-content: center; align-items: center; }
+.filter-row {
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.filter-row-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-400);
+}
+.filter-field { display: flex; align-items: center; gap: 6px; }
+.filter-field label {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-600);
+  white-space: nowrap;
+}
+.search-row input[type="text"] { max-width: 320px; min-height: 44px; padding: 10px 14px; }
+.search-row .count { align-self: center; color: var(--ink-600); font-size: 0.85rem; }
+
+/* ---------- Nav (legacy links style, still used for inline links) ---------- */
+
+.nav { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.nav a {
+  color: var(--blue-700);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+}
+.nav a.active, .nav a:hover { color: var(--navy-900); border-color: var(--gold-500); }
+
+/* ---------- Modal ---------- */
+
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10, 20, 35, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 50;
+  padding: 16px;
+  animation: fadeIn 0.18s ease both;
+}
+.modal {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 84vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(10, 20, 35, 0.35);
+  animation: scaleIn 0.2s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  text-align: center;
+}
+.modal .recognized-panel { justify-content: center; }
+.modal-close {
+  float: inline-end;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--ink-600);
+  padding: 6px 12px;
+  min-height: auto;
+  border-radius: 8px;
+}
+
+.empty-state { text-align: center; color: var(--ink-400); padding: 32px 0; font-weight: 500; }
+
+/* ---------- Login page ---------- */
+
+.login-shell {
+  flex: 1 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(10, 35, 66, 0.1), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(47, 111, 176, 0.16), transparent 45%),
+    var(--bg);
+}
+.login-card { width: 100%; max-width: 400px; text-align: center; animation: fadeInUp 0.35s ease both; }
+.login-card .crest { width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 14px; }
+.login-card .crest svg { width: 32px; height: 32px; }
+.login-card h1 { font-size: 1.35rem; margin-bottom: 4px; }
+.login-card .subtitle { margin-bottom: 20px; }
+.login-card form { text-align: center; }
+
+/* ---------- Footer / credits ---------- */
+
+.site-footer {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 30;
+  background: var(--navy-900);
+  color: rgba(255, 255, 255, 0.88);
+  padding: 16px 28px;
+  border-top: 4px solid var(--gold-500);
+  box-shadow: var(--shadow-md);
+}
+/* The footer is pinned (position:fixed), so it no longer takes up space in
+   the flex column — reserve room for it at the bottom of the scrollable
+   content instead, so it never overlaps anything and never itself moves,
+   no matter what dynamic content (like a recognized-visitor card) appears. */
+.page, .login-shell { padding-bottom: 76px; }
+.site-footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+/* ---------- Responsive / tablet ---------- */
+
+@media (max-width: 760px) {
+  .page { padding: 20px 16px 48px; }
+  .page.page-narrow { max-width: 100%; }
+  .util-bar { padding: 6px 16px; font-size: 0.7rem; }
+  .navbar { padding: 10px 16px; }
+  .topbar-brand-text .sub { display: none; }
+  .topbar-brand-secondary .topbar-brand-text { display: none; }
+  h1 { font-size: 1.4rem; }
+  .card { padding: 18px; border-radius: 12px; }
+  .stats-row { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .stat-tile { padding: 16px; }
+  .stat-tile .value { font-size: 1.7rem; }
+  .btn-row { flex-direction: column; }
+  .btn-row button { width: 100%; }
+  .radio-group { flex-direction: column; }
+  .modal { padding: 18px; }
+  .site-footer-inner { flex-direction: column; text-align: center; gap: 6px; }
+  .page, .login-shell { padding-bottom: 120px; }
+}
+
+@media (max-width: 480px) {
+  .recognized-panel { justify-content: center; text-align: center; }
+}
+
+/* Short viewports (landscape tablets — e.g. 1024x768, 1180x820) have plenty
+   of width but limited height. The sign-up form's step-1 card alone runs
+   ~960px tall at full spacing, pushing the Continue button and footer below
+   the fold. Tighten vertical rhythm specifically when height is tight,
+   independent of width — a portrait tablet (768x1024+) never matches this. */
+@media (max-height: 850px) {
+  .page { padding-top: 12px; }
+  .subtitle { margin-bottom: 12px; }
+  .card { padding: 16px; margin-bottom: 14px; }
+  .step-indicator { margin-bottom: 10px; }
+  label { margin: 8px 0 4px; }
+  input[type="text"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="date"],
+  select {
+    padding: 10px 14px;
+    min-height: 42px;
+  }
+  .radio-group label { padding: 10px; min-height: 42px; }
+  .btn-row { margin-top: 12px; }
+}
+
+/* ---------- Animations & interactivity ---------- */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.5); }
+  70% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+.card { animation: fadeInUp 0.35s ease both; }
+.stats-row .stat-tile:nth-child(1) { animation: fadeInUp 0.35s ease both; }
+.stats-row .stat-tile:nth-child(2) { animation: fadeInUp 0.35s ease 0.05s both; }
+.stats-row .stat-tile:nth-child(3) { animation: fadeInUp 0.35s ease 0.1s both; }
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--blue-600);
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  flex: none;
+}
+.spinner.large { width: 40px; height: 40px; border-width: 4px; }
+
+/* Full-card overlay used by the sign-up kiosk between "success" and handing
+   the tablet back to the next person — covers the step without a page reload. */
+.transition-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  padding: 48px 24px;
+  animation: fadeIn 0.25s ease both;
+}
+.checkmark-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  border: 2px solid var(--success-bd);
+  color: var(--success-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  animation: popIn 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+.transition-overlay .title { font-size: 1.2rem; font-weight: 800; color: var(--navy-900); }
+.transition-overlay .subtitle { margin: 0; }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>تسجيل حضور المكتبة</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+<header class="navbar">
+  <div class="topbar-brand">
+    <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+    <div class="topbar-brand-text">
+      <div class="name">الجامعة التكنولوجية</div>
+      <div class="sub">نظام الدخول إلى المكتبة</div>
+    </div>
+  </div>
+  <div class="topbar-end">
+    <div class="topbar-brand topbar-brand-secondary">
+      <div class="topbar-brand-text">
+        <div class="name">المكتبة المركزية</div>
+      </div>
+      <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+    </div>
+    <div class="topbar-actions"></div>
+  </div>
+</header>
+<div class="page page-narrow">
+  <h1>تسجيل الحضور</h1>
+  <p class="subtitle">انظر إلى الكاميرا لتسجيل حضورك تلقائياً.</p>
+
+  <div id="banner"></div>
+
+  <div class="card">
+    <div class="camera-wrap" id="camera-wrap">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+      <button type="button" id="flip-camera-btn" class="flip-camera-btn" title="تبديل الكاميرا" aria-label="تبديل الكاميرا">⟲</button>
+    </div>
+  </div>
+
+  <div class="card" id="recognized-card" style="display:none">
+    <div class="recognized-panel">
+      <img id="recognized-photo" src="" alt="" />
+      <div>
+        <div style="font-size:1.3rem;font-weight:700" id="recognized-name"></div>
+        <div class="subtitle" style="margin:4px 0 0" id="recognized-time"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/face-api.min.js"></script>
+<script src="signin.js"></script>
+<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+</body>
+</html>

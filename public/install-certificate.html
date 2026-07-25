@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>تثبيت شهادة الأمان — نظام الدخول إلى المكتبة</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+
+<div class="page page-narrow">
+  <div class="crest" style="width:56px;height:56px;margin:0 auto 16px;border-radius:14px">
+    <img src="img/university-crest.png" alt="الجامعة التكنولوجية">
+  </div>
+
+  <div class="kicker">إعداد الجهاز</div>
+  <h1>تثبيت شهادة الأمان</h1>
+  <p class="subtitle">قم بهذه الخطوة مرة واحدة فقط على كل جهاز لوحي، لإزالة تحذير "الاتصال غير آمن" نهائياً على هذا الجهاز.</p>
+
+  <div class="card">
+    <div class="status-banner info">هذا الجهاز اللوحي يستخدم شهادة أمان محلية خاصة بالمكتبة. تثبيتها مرة واحدة يجعل المتصفح يثق بها تلقائياً في كل مرة بعد ذلك.</div>
+    <div class="btn-row">
+      <a href="/install-certificate/library-ca.pem" class="gold" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">تنزيل الشهادة</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">أجهزة أندرويد</h2>
+    <ol style="padding-inline-start:20px;line-height:2.1;color:var(--ink-900)">
+      <li>اضغط على زر "تنزيل الشهادة" أعلاه.</li>
+      <li>افتح <strong>الإعدادات</strong> ← <strong>الأمان</strong> (أو "الأمان والخصوصية") ← <strong>التشفير وبيانات الاعتماد</strong> ← <strong>تثبيت شهادة</strong> ← <strong>شهادة CA</strong>.</li>
+      <li>اختر ملف الشهادة الذي تم تنزيله، ووافق على تحذير النظام (طبيعي أن يظهر، فهذه شهادة محلية للمكتبة).</li>
+      <li>أغلق المتصفح تماماً وأعد فتحه، ثم ادخل إلى الموقع من جديد.</li>
+    </ol>
+    <p class="subtitle" style="margin-bottom:0">قد تختلف أسماء القوائم قليلاً حسب نوع الجهاز والإصدار.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">أجهزة آيباد / آيفون</h2>
+    <ol style="padding-inline-start:20px;line-height:2.1;color:var(--ink-900)">
+      <li>اضغط على زر "تنزيل الشهادة" أعلاه — سيظهر إشعار بأنه تم تنزيل ملف تعريف (Profile).</li>
+      <li>افتح <strong>الإعدادات</strong>، ستجد رسالة "تم تنزيل ملف التعريف" أعلى القائمة — اضغط عليها ثم اضغط <strong>تثبيت</strong> (قد يُطلب رمز مرور الجهاز).</li>
+      <li>بعد التثبيت، اذهب إلى <strong>الإعدادات</strong> ← <strong>عام</strong> ← <strong>حول</strong> ← <strong>إعدادات الثقة بالشهادات</strong>، وفعّل الثقة الكاملة لهذه الشهادة.</li>
+      <li>أغلق Safari تماماً وأعد فتحه، ثم ادخل إلى الموقع من جديد.</li>
+    </ol>
+  </div>
+</div>
+
+<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+<script src="install-certificate.js"></script>
+</body>
+</html>
