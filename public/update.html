@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<title>تحديث البيانات — المكتبة</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+<header class="navbar">
+  <div class="topbar-brand">
+    <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+    <div class="topbar-brand-text">
+      <div class="name">الجامعة التكنولوجية</div>
+      <div class="sub">نظام الدخول إلى المكتبة</div>
+    </div>
+  </div>
+  <div class="topbar-end">
+    <div class="topbar-brand topbar-brand-secondary">
+      <div class="topbar-brand-text">
+        <div class="name">المكتبة المركزية</div>
+      </div>
+      <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+    </div>
+    <div class="topbar-actions">
+      <a href="index.html" class="link">← الرئيسية</a>
+    </div>
+  </div>
+</header>
+
+<div class="page page-narrow">
+  <h1>تحديث بياناتك</h1>
+  <p class="subtitle">أدخل اسمك الكامل ورقم هاتفك للتحقق من هويتك. جميع التعديلات اختيارية — عدّل ما تريد فقط أو لا شيء على الإطلاق.</p>
+
+  <div id="banner"></div>
+
+  <!-- Step 1: Verify identity -->
+  <div class="card" id="step-verify">
+    <div class="step-indicator">
+      <span class="dot active"></span><span class="dot"></span>
+      الخطوة ١ من ٢ — التحقق من هويتك
+    </div>
+
+    <label for="verify-name">الاسم الكامل</label>
+    <input type="text" id="verify-name" placeholder="مثال: أحمد علي" autocomplete="off" maxlength="80" />
+    <p style='font-size:0.8rem;color:var(--ink-400);margin:4px 0 0'>أدخل اسمك كما سجّلته بالضبط</p>
+
+    <label for="verify-phone">رقم الهاتف</label>
+    <input type="tel" id="verify-phone" placeholder="07701234567" autocomplete="off" maxlength="20" />
+    <p style='font-size:0.8rem;color:var(--ink-400);margin:4px 0 0'>يجب أن يبدأ رقم هاتفك بالصفر، مثال: 07701234567</p>
+
+    <div class="btn-row">
+      <button type="button" class="secondary" id="cancel-btn">رجوع للرئيسية</button>
+      <button type="button" id="verify-btn">تحقق وتابع</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Edit information (hidden until verified) -->
+  <div class="card" id="step-edit" style="display:none">
+    <div class="step-indicator">
+      <span class="dot"></span><span class="dot active"></span>
+      الخطوة ٢ من ٢ — تعديل البيانات
+    </div>
+
+    <!-- Current info preview -->
+    <div id="current-info" style="display:flex;align-items:center;gap:16px;padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;">
+      <img id="current-photo" src="" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-500);flex:none;" />
+      <div>
+        <div id="current-name" style="font-weight:800;color:var(--navy-900);font-size:1.05rem;"></div>
+        <div id="current-grade" style="color:var(--ink-600);font-size:0.88rem;margin-top:3px;"></div>
+      </div>
+    </div>
+
+    <!-- Editable: Grade -->
+    <label for="edit-grade">المرحلة الدراسية</label>
+    <select id="edit-grade"></select>
+
+    <!-- Editable: Phone -->
+    <label for="edit-phone">رقم الهاتف</label>
+    <input type="tel" id="edit-phone" placeholder="07701234567" autocomplete="off" maxlength="20" />
+
+    <!-- Editable: Photo -->
+    <label>الصورة الشخصية</label>
+    <div class="camera-wrap" id="camera-wrap" style="display:none">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas" style="display:none"></canvas>
+      <img id="captured-img" style="display:none" alt="الصورة الملتقطة" />
+      <button type="button" id="flip-camera-btn" class="flip-camera-btn" title="تبديل الكاميرا" aria-label="تبديل الكاميرا">⟲</button>
+    </div>
+
+    <div class="btn-row" id="photo-actions">
+      <button type="button" class="secondary" id="open-camera-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-inline-end:7px" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>تغيير الصورة
+      </button>
+    </div>
+    <div class="btn-row" id="capture-actions" style="display:none">
+      <button type="button" class="secondary" id="retake-btn" style="display:none">إعادة الالتقاط</button>
+      <button type="button" id="capture-btn">التقاط الصورة</button>
+    </div>
+
+    <div class="btn-row" style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
+      <button type="button" class="secondary" id="back-btn">رجوع</button>
+      <button type="button" id="save-btn">حفظ التغييرات</button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/face-api.min.js"></script>
+<script src="update.js"></script>
+<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+</body>
+</html>

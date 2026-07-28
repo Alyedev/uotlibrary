@@ -285,7 +285,7 @@ function buildOverlay(children) {
 // NOT touch modelsReady/modelsLoading, so the already-loaded face-api models
 // stay cached for the next sign-up instead of being fetched all over again.
 async function runSuccessSequence(name) {
-  clearBanner(); // a stale error banner from a failed prior attempt must not linger through the success animation
+  clearBanner();
   stepPhoto.style.display = 'none';
 
   const checkmark = document.createElement('div');
@@ -296,9 +296,7 @@ async function runSuccessSequence(name) {
   successTitle.className = 'title';
   successTitle.textContent = 'تم التسجيل بنجاح!';
 
-  // Built via textContent, never string-interpolated into innerHTML, so this
-  // is safe even though `name` is whatever the person just typed at this
-  // shared, unattended kiosk.
+  // Built via textContent, never string-interpolated into innerHTML.
   const successSubtitle = document.createElement('p');
   successSubtitle.className = 'subtitle';
   successSubtitle.textContent = `أهلاً بك، ${name}`;
@@ -306,51 +304,9 @@ async function runSuccessSequence(name) {
   const successOverlay = buildOverlay([checkmark, successTitle, successSubtitle]);
   pageEl.insertBefore(successOverlay, stepPhoto.nextSibling);
 
-  await wait(1600);
-
-  const spinnerEl = document.createElement('div');
-  spinnerEl.className = 'spinner large';
-
-  const loadingText = document.createElement('p');
-  loadingText.className = 'subtitle';
-  loadingText.textContent = 'جارٍ التجهيز للشخص التالي...';
-
-  const loadingOverlay = buildOverlay([spinnerEl, loadingText]);
-  successOverlay.replaceWith(loadingOverlay);
-
-  await wait(1200);
-
-  loadingOverlay.remove();
-  resetForNextPerson();
-}
-
-function resetForNextPerson() {
-  nameInput.value = '';
-  phoneInput.value = '';
-  collegeSelect.selectedIndex = 0;
-  gradeSelect.selectedIndex = 0;
-
-  genderGroup.querySelectorAll('input[name="gender"]').forEach((input) => {
-    input.checked = false;
-  });
-  genderGroup.querySelectorAll('label').forEach((lbl) => lbl.classList.remove('selected'));
-
-  capturedDescriptor = null;
-  capturedPhotoDataUrl = null;
-  capturedImg.style.display = 'none';
-  capturedImg.src = '';
-  video.style.display = 'block';
-  captureBtn.style.display = 'block';
-  captureBtn.disabled = false;
-  captureBtn.textContent = 'التقاط الصورة';
-  retakeBtn.style.display = 'none';
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'تسجيل';
-
-  clearBanner();
-
-  stepPhoto.style.display = 'none';
-  stepInfo.style.display = 'block';
+  // Show success for 2 seconds then go back to the main screen.
+  await wait(2000);
+  window.location.href = 'index.html';
 }
 
 submitBtn.addEventListener('click', async () => {

@@ -456,6 +456,110 @@ app.delete('/api/people', requireAdmin, adminActionLimiter, (req, res) => {
   res.json({ ok: true, deleted: rows.length });
 });
 
+// ---- Self-service "update my info" endpoints ----
+// Both are intentionally PUBLIC/unauthenticated: the kiosk is a shared device
+// with no staff login. Security relies on the person knowing BOTH their exact
+// registered full name AND their registered phone number — a lightweight but
+// practical barrier on a physical campus kiosk.
+
+// Look up a person by (name, phone) — returns minimal public profile so the
+// kiosk can show the person their current data before they edit it.
+app.post('/api/people/self-lookup', signupLimiter, (req, res) => {
+  const body  = req.body || {};
+  const name  = typeof body.name  === 'string' ? body.name.trim()  : '';
+  const phone = typeof body.phone === 'string'
+    ? normalizeArabicIndicDigits(body.phone).trim()
+    : '';
+
+  if (name.length < 2)  return res.status(400).json({ error: 'يرجى إدخال الاسم الكامل' });
+  if (!phone)           return res.status(400).json({ error: 'يرجى إدخال رقم الهاتف' });
+
+  const row = db
+    .prepare('SELECT * FROM people WHERE LOWER(name) = LOWER(?) AND phone = ? LIMIT 1')
+    .get(name, phone);
+
+  if (!row) {
+    return res.status(404).json({
+      error: 'لم يتم العثور على حسابك. تأكد من كتابة اسمك الكامل تماماً كما سجّلته، ورقم هاتفك كاملاً مع الصفر في البداية (مثال: 07701234567).',
+    });
+  }
+
+  res.json(personRowToJson(row));
+});
+
+// Update (grade, phone, photo) for a person identified by (name, current phone).
+app.patch('/api/people/self-update', signupLimiter, (req, res) => {
+  const body     = req.body || {};
+  const name     = typeof body.name  === 'string' ? body.name.trim()  : '';
+  const phone    = typeof body.phone === 'string'
+    ? normalizeArabicIndicDigits(body.phone).trim()
+    : '';
+  const newPhone = typeof body.newPhone === 'string'
+    ? normalizeArabicIndicDigits(body.newPhone).trim()
+    : phone;
+  const newGrade = typeof body.newGrade === 'string' ? body.newGrade.trim() : '';
+
+  // -- Validate inputs --
+  if (name.length < 2)  return res.status(400).json({ error: 'يرجى إدخال الاسم الكامل' });
+  if (!phone)           return res.status(400).json({ error: 'رقم الهاتف الأصلي مطلوب' });
+  if (!PHONE_REGEX.test(newPhone)) return res.status(400).json({ error: 'رقم الهاتف الجديد غير صالح' });
+  if (!GRADES.includes(newGrade)) return res.status(400).json({ error: 'المرحلة الدراسية غير صالحة' });
+
+  // -- Look up the person --
+  const row = db
+    .prepare('SELECT * FROM people WHERE LOWER(name) = LOWER(?) AND phone = ? LIMIT 1')
+    .get(name, phone);
+
+  if (!row) {
+    return res.status(404).json({
+      error: 'لم يتم العثور على حسابك. تأكد من كتابة اسمك الكامل تماماً كما سجّلته، ورقم هاتفك كاملاً مع الصفر في البداية (مثال: 07701234567).',
+    });
+  }
+
+  let newPhotoFilename = row.photo_path;
+  let newDescriptor    = row.descriptor;
+
+  // -- If a new photo was provided, validate and save it --
+  if (body.photo) {
+    if (
+      !Array.isArray(body.descriptor) ||
+      body.descriptor.length !== 128 ||
+      !body.descriptor.every((n) => typeof n === 'number' && Number.isFinite(n))
+    ) {
+      return res.status(400).json({ error: 'تعذّر قراءة بيانات الوجه' });
+    }
+
+    const matches = /^data:image\/(png|jpeg);base64,(.+)$/.exec(body.photo);
+    if (!matches) return res.status(400).json({ error: 'بيانات الصورة غير صالحة' });
+
+    const ext    = matches[1] === 'png' ? 'png' : 'jpg';
+    const buffer = Buffer.from(matches[2], 'base64');
+
+    if (buffer.length > MAX_PHOTO_BYTES) return res.status(400).json({ error: 'حجم الصورة كبير جداً' });
+    if (!isValidImageSignature(buffer, matches[1])) return res.status(400).json({ error: 'بيانات الصورة غير صالحة' });
+
+    newPhotoFilename = `${crypto.randomUUID()}.${ext}`;
+    fs.writeFileSync(path.join(PHOTOS_DIR, newPhotoFilename), buffer);
+
+    // Best-effort delete of the old photo file
+    if (row.photo_path && row.photo_path !== newPhotoFilename) {
+      fs.unlink(path.join(PHOTOS_DIR, row.photo_path), (err) => {
+        if (err && err.code !== 'ENOENT') console.error('Failed to delete old photo', row.photo_path, err);
+      });
+    }
+
+    newDescriptor = JSON.stringify(body.descriptor);
+  }
+
+  // -- Persist --
+  db.prepare(
+    'UPDATE people SET grade = ?, phone = ?, photo_path = ?, descriptor = ? WHERE id = ?'
+  ).run(newGrade, newPhone, newPhotoFilename, newDescriptor, row.id);
+
+  const updated = db.prepare('SELECT * FROM people WHERE id = ?').get(row.id);
+  res.json(personRowToJson(updated));
+});
+
 // 0.6 is the standard "same person" cutoff for this 128-d face descriptor
 // model (face-api.js/dlib's own recommended threshold).
 const MATCH_THRESHOLD = 0.6;

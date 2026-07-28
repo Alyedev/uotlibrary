@@ -244,11 +244,7 @@ function showRecognized(data) {
   recognizedPhoto.src = data.photoUrl;
   recognizedName.textContent = `أهلاً بعودتك، ${data.name}!`;
   recognizedTime.textContent = new Date(data.visitedAt).toLocaleString('ar');
-  // Card is shown/hidden via style.display rather than re-created, so the
-  // stylesheet's fade/slide-in animation (triggered on element creation)
-  // wouldn't normally replay on repeat sign-ins. Remove and re-add the
-  // class to force a reflow and restart the animation each time someone
-  // new is greeted.
+  // Force the card's fade-in animation to replay on every new greeting.
   recognizedCard.classList.remove('card');
   void recognizedCard.offsetWidth;
   recognizedCard.classList.add('card');
@@ -261,14 +257,13 @@ function showRecognized(data) {
     showSuccessToast(data.name);
   }
 
-  // Auto-hide the welcome-back card after 30s so it doesn't linger on
-  // screen for whoever walks up next. Clear any previous pending hide
-  // first, since a new greeting shouldn't get cut short by an old timer.
+  // Auto-hide the greeting card after 8 s so it doesn't block the camera
+  // view for the next person. No redirect — the scan page stays live.
   if (hideRecognizedCardTimer) clearTimeout(hideRecognizedCardTimer);
   hideRecognizedCardTimer = setTimeout(() => {
     recognizedCard.style.display = 'none';
     hideRecognizedCardTimer = null;
-  }, 30000);
+  }, 8000);
 }
 
 async function detectLoop() {

@@ -3,35 +3,422 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="description" content="نظام الدخول إلى المكتبة — الجامعة التكنولوجية" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css" />
 <title>نظام الدخول إلى المكتبة — الجامعة التكنولوجية</title>
+<style>
+  /* ── Loading overlay ─────────────────────────────────────────────────── */
+  #loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  #loading-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .loading-logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .loading-crests {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .loading-crests .crest {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+  }
+  .loading-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+  .loading-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ink-600);
+    letter-spacing: 0.02em;
+  }
+  .loading-please-wait {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy-900);
+    margin: 0;
+  }
+  .progress-track {
+    width: 240px;
+    height: 5px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--navy-800), var(--blue-600));
+    border-radius: 999px;
+    animation: progress-run 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes progress-run {
+    0%   { width: 0%; }
+    60%  { width: 72%; }
+    90%  { width: 90%; }
+    100% { width: 100%; }
+  }
+
+  /* ── Page shell ──────────────────────────────────────────────────────── */
+  body { align-items: stretch; }
+
+  .home-shell {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px 88px;
+    gap: 0;
+  }
+
+  /* ── Header / branding ───────────────────────────────────────────────── */
+  .home-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+    animation: fadeInUp 0.3s ease both;
+  }
+  .home-brand .crest {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    box-shadow: 0 0 0 1px var(--border), var(--shadow-sm);
+  }
+  .brand-divider {
+    width: 1px;
+    height: 44px;
+    background: var(--border);
+  }
+  .brand-names {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: start;
+  }
+  .brand-names .primary-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    line-height: 1.2;
+  }
+  .brand-names .secondary-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-600);
+  }
+  .home-eyebrow {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue-700);
+    margin-bottom: 6px;
+    animation: fadeInUp 0.3s ease 0.05s both;
+  }
+  .home-title {
+    text-align: center;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+    animation: fadeInUp 0.3s ease 0.08s both;
+  }
+  .home-sub {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--ink-600);
+    margin: 0 0 32px;
+    line-height: 1.55;
+    animation: fadeInUp 0.3s ease 0.1s both;
+  }
+
+  /* ── Card grid ───────────────────────────────────────────────────────── */
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 620px;
+    margin-bottom: 14px;
+  }
+
+  .home-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    animation: fadeInUp 0.35s ease both;
+  }
+  .home-card:nth-child(2) { animation-delay: 0.07s; }
+
+  /* Top accent bar */
+  .home-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .home-card.card-blue::before  { background: linear-gradient(90deg, var(--navy-800), var(--blue-600)); }
+  .home-card.card-gold::before  { background: linear-gradient(90deg, var(--gold-500), var(--gold-600)); }
+
+  .home-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--blue-100);
+  }
+  .home-card.card-gold:hover { border-color: var(--gold-50); }
+
+  .card-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .card-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+  }
+  .home-card.card-blue  .card-icon-wrap { background: var(--blue-50);  color: var(--blue-700); }
+  .home-card.card-gold  .card-icon-wrap { background: var(--gold-50);  color: var(--gold-600); }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--ink-600);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ── Smaller update card ─────────────────────────────────────────────── */
+  .home-card-sm {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    animation: fadeInUp 0.35s ease 0.14s both;
+  }
+  .home-card-sm::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--navy-800), var(--blue-600));
+  }
+  .home-card-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--blue-100);
+  }
+  .home-card-sm .card-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--blue-50);
+    color: var(--blue-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .home-card-sm .card-icon-wrap svg { width: 20px; height: 20px; display: block; }
+  .home-card-sm .card-text { flex: 1; min-width: 0; }
+  .home-card-sm .card-title { font-size: 0.95rem; font-weight: 800; color: var(--navy-900); margin: 0 0 2px; text-align: start; }
+  .home-card-sm .card-desc  { font-size: 0.79rem; color: var(--ink-600); margin: 0; text-align: start; }
+  .home-card-sm .card-chevron {
+    flex: none;
+    color: var(--ink-400);
+    display: flex;
+    align-items: center;
+  }
+  .home-card-sm .card-chevron svg { width: 18px; height: 18px; }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 580px) {
+    .home-grid { grid-template-columns: 1fr; max-width: 100%; }
+    .home-card-sm { max-width: 100%; }
+    .home-title { font-size: 1.5rem; }
+  }
+  @media (max-width: 400px) {
+    .home-brand { flex-direction: column; gap: 10px; }
+    .brand-divider { display: none; }
+  }
+</style>
 </head>
 <body>
-<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
 
-<div class="page page-narrow">
-  <div class="crest" style="width:56px;height:56px;margin:0 auto 16px;border-radius:14px">
-    <img src="img/university-crest.png" alt="الجامعة التكنولوجية">
+<!-- ══ Loading overlay ══════════════════════════════════════════════════ -->
+<div id="loading-overlay" role="status" aria-live="polite" aria-label="جارٍ التحميل">
+  <div class="loading-logo-wrap">
+    <div class="loading-crests">
+      <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+      <div class="loading-divider"></div>
+      <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+    </div>
+    <span class="loading-label">الجامعة التكنولوجية — المكتبة المركزية</span>
   </div>
-
-  <h1>مرحباً بك</h1>
-  <p class="subtitle">اختر القسم الذي تريد الدخول إليه</p>
-
-  <div class="btn-row">
-    <button type="button" class="secondary" id="go-dashboard">لوحة التحكم</button>
+  <div>
+    <p class="loading-please-wait">يرجى الانتظار…</p>
   </div>
-  <div class="btn-row">
-    <button type="button" id="go-signup">جهاز التسجيل</button>
-  </div>
-  <div class="btn-row">
-    <button type="button" class="gold" id="go-signin">جهاز تسجيل الحضور</button>
+  <div class="progress-track">
+    <div class="progress-bar" id="progress-bar"></div>
   </div>
 </div>
 
-<footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
+<!-- ══ Utility strip ════════════════════════════════════════════════════ -->
+<div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
+
+<!-- ══ Main content ═════════════════════════════════════════════════════ -->
+<main class="home-shell">
+
+  <!-- Dual brand header -->
+  <div class="home-brand">
+    <div class="crest"><img src="img/university-crest.png" alt="الجامعة التكنولوجية"></div>
+    <div class="brand-divider"></div>
+    <div class="brand-names">
+      <div class="primary-name">الجامعة التكنولوجية</div>
+      <div class="secondary-name">المكتبة المركزية</div>
+    </div>
+    <div class="brand-divider"></div>
+    <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
+  </div>
+
+  <p class="home-eyebrow">نظام الدخول إلى المكتبة</p>
+  <h1 class="home-title">مرحباً بك</h1>
+  <p class="home-sub">اختر القسم المناسب للمتابعة</p>
+
+  <!-- Primary two-column cards -->
+  <div class="home-grid">
+
+    <!-- Attendance scanning -->
+    <a class="home-card card-blue" id="go-signin" href="signin.html" role="button">
+      <div class="card-icon-wrap">
+        <!-- Camera / face scan icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <div class="card-title">تسجيل الحضور</div>
+      <p class="card-desc">انظر إلى الكاميرا وسيتعرف عليك النظام تلقائياً لتسجيل حضورك.</p>
+    </a>
+
+    <!-- New registration -->
+    <a class="home-card card-gold" id="go-signup" href="signup.html" role="button">
+      <div class="card-icon-wrap">
+        <!-- User-plus icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+      </div>
+      <div class="card-title">تسجيل جديد</div>
+      <p class="card-desc">أول مرة؟ سنقودك خطوة بخطوة لإنشاء حسابك وإضافة صورتك.</p>
+    </a>
+
+  </div>
+
+  <!-- Secondary update card -->
+  <a class="home-card-sm" id="go-update" href="update.html" role="button">
+    <div class="card-icon-wrap">
+      <!-- Edit / pencil icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+    </div>
+    <div class="card-text">
+      <div class="card-title">تحديث بياناتك</div>
+      <p class="card-desc">تعديل المرحلة الدراسية، رقم الهاتف، أو الصورة الشخصية</p>
+    </div>
+    <span class="card-chevron" aria-hidden="true">
+      <!-- Chevron left (RTL = pointing right → navigate) -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </span>
+  </a>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <span>المكتبة المركزية — تأسست عام 1975</span>
+    <span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span>
+    <span>من تطوير Ali Hatim</span>
+  </div>
+</footer>
+
 <script src="index.js"></script>
 </body>
 </html>
