@@ -42,7 +42,10 @@ if (footerYear) footerYear.textContent = new Date().getFullYear();
 
 // Cancel — go back to main screen without doing anything
 const cancelBtn = document.getElementById('cancel-btn');
-if (cancelBtn) cancelBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+if (cancelBtn) cancelBtn.addEventListener('click', () => {
+  if (window.showLoadingAndNavigate) window.showLoadingAndNavigate('index.html');
+  else window.location.href = 'index.html';
+});
 
 // ---- State ----
 let foundPerson          = null;  // person returned from /api/people/self-lookup

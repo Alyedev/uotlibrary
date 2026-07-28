@@ -10,6 +10,25 @@
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+
+<!-- ══ Loading overlay ══════════════════════════════════════════════════ -->
+<div id="loading-overlay" role="status" aria-live="polite" aria-label="جارٍ التحميل">
+  <div class="loading-center">
+    <div class="loading-icon-stage">
+      <div class="loading-icon-wrap" id="loading-icon-wrap">
+        <svg id="loading-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true"></svg>
+      </div>
+    </div>
+    <span class="loading-label">الجامعة التكنولوجية — المكتبة المركزية</span>
+    <p class="loading-please-wait">يرجى الانتظار…</p>
+  </div>
+  <div class="progress-track">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+</div>
+
 <div class="util-bar">نظام الدخول إلى المكتبة — الجامعة التكنولوجية</div>
 <header class="navbar">
   <div class="topbar-brand">
@@ -27,7 +46,7 @@
       <div class="crest"><img src="img/central-library-logo.png" alt="المكتبة المركزية"></div>
     </div>
     <div class="topbar-actions">
-      <a href="index.html" class="link">← الرئيسية</a>
+      <a href="index.html" class="link js-loading-nav">← الرئيسية</a>
     </div>
   </div>
 </header>
@@ -109,6 +128,7 @@
   </div>
 </div>
 
+<script src="loading.js"></script>
 <script src="vendor/face-api.min.js"></script>
 <script src="update.js"></script>
 <footer class="site-footer"><div class="site-footer-inner"><span>المكتبة المركزية — تأسست عام 1975</span><span>© <span id="footer-year"></span> نظام الدخول إلى المكتبة</span><span>من تطوير Ali Hatim</span></div></footer>
